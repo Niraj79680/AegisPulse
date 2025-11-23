@@ -1,4 +1,4 @@
-# 🏥 AEGIS Pulse – Medical Triage System
+# 🏥 AegisPulse – Medical Triage System
 
 A Java web-based clinical triage system that prioritizes patients based on severity to assist hospitals in managing emergency cases efficiently.
 
