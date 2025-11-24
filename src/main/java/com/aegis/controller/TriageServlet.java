@@ -15,7 +15,7 @@ public class TriageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 1. Security Check: If session is dead, kick them out immediately
+
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("login.jsp");
@@ -48,14 +48,11 @@ public class TriageServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // 2. STRICT REDIRECT (The Fix)
         String role = (String) session.getAttribute("role");
 
         if ("STAFF".equals(role)) {
-            // Nurses stay here
             response.sendRedirect("staff_dashboard.jsp?success=1");
         } else {
-            // Everyone else (including errors) goes to Login, NOT Doctor Dashboard
             response.sendRedirect("login.jsp");
         }
     }

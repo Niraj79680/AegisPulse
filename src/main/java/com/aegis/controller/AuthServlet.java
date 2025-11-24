@@ -23,7 +23,7 @@ public class AuthServlet extends HttpServlet {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                // Invalidate old session to prevent role mix-ups
+                // reset old session (prevents role mixing)
                 request.getSession().invalidate();
                 HttpSession session = request.getSession(true);
 
@@ -31,13 +31,13 @@ public class AuthServlet extends HttpServlet {
                 String role = rs.getString("role");
                 session.setAttribute("role", role);
 
-                // STRICT REDIRECT: Only 2 Paths
+                // only valid roles allowed forward
                 if ("STAFF".equals(role)) {
                     response.sendRedirect("staff_dashboard.jsp");
                 } else if ("DOCTOR".equals(role)) {
                     response.sendRedirect("doctor_dashboard.jsp");
                 } else {
-                    // Unknown role (like Admin) -> Logout immediately
+                    // unknown role -> force logout
                     session.invalidate();
                     response.sendRedirect("login.jsp?error=Unauthorized Role");
                 }
