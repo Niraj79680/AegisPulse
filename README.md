@@ -136,13 +136,6 @@ SELECT * FROM users;
 ---
 
 ## 🔢 7. Severity Scoring Algorithm
-A weighted formula assigns priority:
-
-Example:
-```java
-score = (heartRate * 2) + (painLevel * 1.5);
-```
-
 Higher = more critical.
 
 ---
@@ -192,18 +185,7 @@ public class TriageServlet extends HttpServlet {
 
 ---
 
-## 🖼️ 10. Screenshots (Add folder in your repo)
-Create a folder:
-
-```
-/screenshots
-    login.png
-    staff_dashboard.png
-    doctor_dashboard.png
-    triage_form.png
-```
-
----
+## 🖼️ 10. Screenshots (folder addedin repo)
 
 ## ⚒️ 11. How to Run
 ### Requirements
@@ -243,6 +225,3 @@ AegisPulse is a complete Java web application demonstrating:
 - Servlets + JSP integration  
 - Secure JDBC usage  
 - Clean modular design  
-
-Perfect for academic evaluation, internships, and industry demonstration.
-
