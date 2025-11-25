@@ -185,7 +185,7 @@ public class TriageServlet extends HttpServlet {
 
 ---
 
-## 🖼️ 10. Screenshots (folder addedin repo)
+## 🖼️ 10. Screenshots (folder added in repo)
 
 ## ⚒️ 11. How to Run
 ### Requirements
