@@ -184,10 +184,28 @@ public class TriageServlet extends HttpServlet {
 ✔ MVC-compliant design  
 
 ---
+## 10 Security and Testing
 
-## 🖼️ 10. Screenshots (folder added in repo)
+### Security
+The application implements strong authentication and role-based access control (RBAC).
+Authentication is handled using an `AuthServlet`, while authorization is enforced through an
+`AuthFilter` that restricts access to application resources based on user roles.
 
-## ⚒️ 11. How to Run
+### Testing
+Unit and integration testing were implemented to improve the reliability and maintainability
+of the complaint workflow.
+
+- **Unit Testing:**  
+  `TriageLogicTest` was implemented to validate core business logic, including severity score
+  calculation and triage color decision rules.
+
+- **Integration / Workflow Testing:**  
+  `ComplaintIntegrationTest` was implemented to verify the complaint workflow by testing the
+  interaction between complaint handling logic and triage decision components.
+
+## 🖼️ 11. Screenshots (folder added in repo)
+
+## ⚒️ 12. How to Run
 ### Requirements
 - Java 8+  
 - Apache Tomcat 9+  
@@ -208,7 +226,7 @@ http://localhost:8081/AegisPulse
 
 ---
 
-## 🔮 12. Future Enhancements
+## 🔮 13. Future Enhancements
 - ML-based severity prediction  
 - Email/SMS alerts  
 - Admin analytics dashboard  
@@ -217,7 +235,7 @@ http://localhost:8081/AegisPulse
 
 ---
 
-## 🏁 13. Conclusion
+## 🏁 14. Conclusion
 AegisPulse is a complete Java web application demonstrating:
 
 - Strong problem understanding  
