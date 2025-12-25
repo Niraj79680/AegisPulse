@@ -159,7 +159,8 @@
             <p class="text-emerald-700 text-sm font-medium">Medical Triage System</p>
         </div>
 
-        <form action="auth" method="post" class="flex flex-col gap-5">
+        <!-- ✅ ONLY FIX IS HERE -->
+        <form action="${pageContext.request.contextPath}/auth" method="post" class="flex flex-col gap-5">
             <div class="relative">
                 <i class="fa-solid fa-user absolute left-4 top-3 text-slate-400"></i>
                 <input type="text" name="username" placeholder="Username" required
