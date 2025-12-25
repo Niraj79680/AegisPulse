@@ -1,150 +1,258 @@
 🏥 AegisPulse – Intelligent Medical Triage System
 
-AegisPulse is a Java-based web application designed to assist hospitals in managing emergency patients by automating the triage process. The system evaluates patient conditions using medical parameters and assigns priority levels to ensure timely and effective treatment.
+AegisPulse is a robust, Java-based clinical triage application designed to automate patient prioritization in emergency departments. By leveraging a weighted severity scoring algorithm, it ensures that critical patients receive immediate care while providing a streamlined workflow for both medical staff and doctors.
 
 🚀 1. Project Overview
 
-In emergency scenarios, quick and accurate decision-making is critical. Manual triage can be inconsistent and error-prone.
-AegisPulse addresses this by introducing an automated, rule-based triage system that supports medical staff in prioritizing patients efficiently.
+In high-pressure emergency scenarios, manual triage is often inconsistent and slow. AegisPulse addresses this by providing an automated decision-support system that ranks patients based on real-time vitals and clinical risk factors.
+
+The Value Proposition:
+
+Instant Prioritization: Eliminates delays in identifying life-threatening cases.
+
+Clinical Consistency: Removes human bias from the triage process.
+
+Optimized Workflow: Segregates duties between Nurses (Intake) and Doctors (Resolution).
+
+Data Integrity: Maintains a secure, persistent record of every patient assessment.
 
 🎯 2. Key Features
 
-Role-based access control (RBAC)
+👨‍⚕️ Role-Based Access Control (RBAC)
 
-Automated patient triage using rule-based logic
+Staff (Nurse/Intake): Authorized to register patients, enter vitals, and submit clinical symptoms.
 
-Secure authentication and session management
+Doctor (Clinical lead): Access to a prioritized real-time queue. Can view detailed diagnostics and mark cases as "Resolved."
 
-MVC-based clean architecture
+⚙️ Core System Functions
 
-Database-driven patient management
+Intelligent Scoring Algorithm: Weighted calculation based on O2, HR, Pain, and Symptoms.
 
-Real-time prioritization of patients
+Automated Queue Sorting: Patients are automatically ranked: RED (Critical) > YELLOW (Urgent) > GREEN (Stable).
 
-🧩 3. System Architecture
-Controller Layer (Servlets)
-        ↓
-Business Logic Layer (TriageLogic)
-        ↓
-DAO Layer (Database Access)
-        ↓
-MySQL Database
+Session Security: Enforced by AuthFilter to prevent unauthorized URL access.
 
-**Core Components
+MVC Architecture: Separation of concerns using Servlets (Controller), Logic (Service), and JDBC (Data).
 
-AuthServlet – Handles user login and authentication
+🧩 3. System Architecture (MVC)
 
-AuthFilter – Enforces role-based access control on protected resources
+The system is built using the Model-View-Controller pattern to ensure modularity and ease of testing.
 
-TriageServlet – Accepts patient data and applies triage logic
+    [ View Layer ]          [ Controller Layer ]       [ Business Logic ]        [ Data Layer ]
+      (JSP Pages)      ->      (Servlets)       ->     (TriageLogic.java)   ->    (DAOs + JDBC)
+           ↑                       |                          |                        |
+           └-----------------------┴--------------------------┴------------------------┘
+                                           MySQL Database
 
-ResolveServlet – Marks patient cases as resolved
 
-TriageLogic – Core algorithm for severity evaluation
+Component Breakdown:
 
-🔐 4. Security & Access Control (IMPORTANT)
+Servlets: AuthServlet (Login), TriageServlet (Processing), ResolveServlet (Closure).
 
-Security is implemented at multiple levels:
+Security: AuthFilter (Authorization) ensures only logged-in users with correct roles access specific pages.
 
-✔ Authentication
+Logic: TriageLogic.java — The "Brain" of the system that handles clinical weights.
 
-Users must log in via AuthServlet
+DAO: PatientDAO — Handles all CRUD operations using secure Prepared Statements.
 
-Credentials are validated against the database
+🔍 4. Problem & Solution Design
 
-✔ Authorization (RBAC)
+The Challenge
 
-AuthFilter intercepts all protected requests
+During peak hours, medical staff face "Decision Fatigue," leading to potential errors in patient ranking.
 
-Ensures only authenticated users with valid roles can access resources
+The AegisPulse Solution
 
-Prevents unauthorized access to internal pages
+Intake: Staff inputs Vitals (Heart Rate, O2, Pain) and Symptoms.
 
-✔ Session Management
+Analysis: The TriageLogic component applies weighted scoring.
 
-Sessions are validated on every request
+Communication: The system immediately updates the Doctor's Dashboard.
 
-Unauthenticated users are redirected to login
+Action: Doctors can resolve the highest-scoring patients first, ensuring safety.
 
-✔ SQL Injection Prevention
+🏛️ 5. Technical Flow Diagram
 
-All database operations use PreparedStatement
+[ LOGIN ] -> [ AUTH FILTER ] -> [ STAFF DASHBOARD ] -> [ FORM INPUT ]
+                                          |
+                                [ TRIAGE LOGIC (Score) ]
+                                          |
+                                [ DATABASE (JDBC) ]
+                                          |
+                                [ DOCTOR DASHBOARD (Sorted) ] -> [ RESOLVE ]
 
-No raw SQL concatenation is used
 
-🧠 5. Triage Logic & Decision Making
+🗄️ 6. Database Design
 
-The system evaluates patients using:
+Database Schema (MySQL)
 
-Heart rate
+CREATE DATABASE aegis_db;
+USE aegis_db;
 
-Oxygen level
+-- Table for RBAC Security
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    role VARCHAR(20) NOT NULL -- 'DOCTOR' or 'STAFF'
+);
 
-Pain severity
+-- Table for Patient Management
+CREATE TABLE patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INT,
+    heart_rate INT,
+    oxygen_level INT,
+    pain_level INT,
+    symptoms TEXT,
+    triage_score INT,
+    triage_color VARCHAR(20), -- 'RED', 'YELLOW', 'GREEN'
+    status VARCHAR(20) DEFAULT 'PENDING', -- 'PENDING' or 'RESOLVED'
+    assessment_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-Reported symptoms
 
-Based on these values, a severity score is calculated and classified into:
+🔢 7. Severity Scoring Algorithm
 
-RED – Critical
+The clinical engine uses the following weights to determine the Triage Color:
 
-YELLOW – Moderate
+Parameter
 
-GREEN – Stable
+Condition
 
-This logic ensures consistent and fair medical prioritization.
+Weight
 
-🧪 6. Testing Strategy
-Unit Testing
+Oxygen (SpO2)
 
-TriageLogicTest validates the correctness of the severity calculation.
+< 90%
 
-Ensures edge cases are handled properly.
++40 points
 
-Integration Testing
+Oxygen (SpO2)
 
-ComplaintIntegrationTest verifies end-to-end flow:
+90% - 94%
 
-Input → Logic → Database → Response
++20 points
 
-Confirms smooth interaction between components.
+Heart Rate
 
-🗄️ 7. Database Design
-Tables
-Users (id, username, password, role)
-Patients (id, name, age, heart_rate, oxygen_level, pain_level, severity_score, status)
+> 120 or < 40
 
++30 points
 
-Normalized schema
+Pain Level
 
-Referential integrity
+(Scale 1-10)
 
-Secure access via prepared statements
+Value * 3
 
-🧰 8. Technology Stack
+Keywords
 
-Java (JDK 8+)
+"Chest Pain", "Bleeding"
 
-JSP & Servlets
++40 to +50 points
 
-Apache Tomcat
+Color Mapping:
 
-MySQL
+Score >= 75: 🔴 RED (Immediate)
 
-JDBC
+Score 40-74: 🟡 YELLOW (Urgent)
 
-Maven
+Score < 40: 🟢 GREEN (Stable)
 
-🏁 9. Conclusion
+🔐 8. JDBC Integration & Security
 
-AegisPulse is a complete, secure, and scalable web application that demonstrates:
+We utilize Prepared Statements to eliminate SQL Injection risks.
 
-Proper MVC architecture
+// Example from PatientDAO.java
+String sql = "INSERT INTO patients(name, age, heart_rate, oxygen_level, symptoms, triage_score, triage_color) VALUES (?, ?, ?, ?, ?, ?, ?)";
+try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+    stmt.setString(1, patient.getName());
+    stmt.setInt(2, patient.getAge());
+    stmt.setInt(3, patient.getHeartRate());
+    stmt.setInt(4, patient.getOxygenLevel());
+    stmt.setString(5, patient.getSymptoms());
+    stmt.setInt(6, patient.getTriageScore());
+    stmt.setString(7, patient.getTriageColor());
+    stmt.executeUpdate();
+}
 
-Secure authentication and authorization
 
-Real-world problem solving
+🧪 9. Quality Assurance & Testing
 
-Clean coding and modular design
+To ensure clinical reliability, the project includes:
 
-This project meets academic requirements and reflects practical backend development skills.
+Unit Testing (TriageLogicTest.java)
+
+Validates the scoring math for all edge cases (Hypoxia, Tachycardia, etc.).
+
+Confirms correct color assignment for specific scores.
+
+Integration Testing (ComplaintIntegrationTest.java)
+
+Tests the end-to-end flow from Servlet input to Database persistence.
+
+Verifies that the dashboard correctly displays the prioritized queue.
+
+⚒️ 10. How to Run
+
+Requirements
+
+Java 21+
+
+Apache Tomcat 10+
+
+MySQL Server
+
+Maven (Build Tool)
+
+Steps
+
+Clone the repository.
+
+Setup Database: Execute the SQL script in aegis_db.sql.
+
+Update Credentials: Set your MySQL user/pass in DBConnection.java.
+
+Build Project: Run mvn clean install.
+
+Deploy: Move the .war file to Tomcat's webapps folder.
+
+Access: http://localhost:8080/AegisProject/
+
+#11.
+“The system demonstrates effective collaboration through modular design and role-based architecture. Each component (authentication, triage logic, data access, and presentation) can be independently developed and maintained, reflecting real-world team-based software development practices.”
+
+🏁 12.
+👥 Authors & Collaboration
+
+This project was developed as a collaborative academic effort, following standard team-based software development practices.
+
+Lead Developer
+
+Niraj Kumar
+
+Designed the overall system architecture and application flow
+
+Implemented the core business logic and triage algorithm
+
+Developed backend components including Servlets, DAO layer, and database integration
+
+Handled authentication, authorization, and session management
+
+Performed integration testing and final system validation
+
+Co-Developer
+
+Prince pratap Singh
+
+Assisted in frontend development using JSP
+
+Contributed to testing, validation, and debugging of application features
+
+Supported documentation and verification of system workflows
+
+🏁13. Conclusion
+
+AegisPulse is a comprehensive Java Enterprise solution that demonstrates high-level proficiency in MVC design, database security, and automated clinical logic. It provides a scalable foundation for modern hospital resource management.
