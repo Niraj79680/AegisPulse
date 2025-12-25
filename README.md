@@ -1,111 +1,104 @@
-# 🏥 AegisPulse – Medical Triage System
-
-A Java web-based clinical triage system that prioritizes patients based on severity to assist hospitals in managing emergency cases efficiently.
-
----
-
-## 🚀 Project Overview
-
-Hospitals often struggle when multiple patients arrive at the same time, making it difficult to decide who requires urgent attention. Manual triage can lead to delays and risk patient safety.
-
-This system automates triage using:
-
-- Vital signs
-- Pain level
-- Symptoms
-
-and produces a severity score, ensuring the most critical patients are treated first.
+# 🏥 AegisPulse – Intelligent Medical Triage System  
+A Java-based clinical triage system that automates patient prioritization using severity scoring, helping hospitals manage emergency cases efficiently and safely.
 
 ---
 
-## 🧭 System Workflow
+## 🚀 1. Project Overview
+Hospitals often receive multiple emergency patients at the same time, making manual triage slow and error-prone.  
+**AegisPulse** provides an automated triage algorithm that ranks patients based on vital signs, symptoms, and risk factors.
 
-Login → Role Check  
-↓  
-Nurse Intake → Severity Scoring → Database (PENDING)  
-↓  
-Doctor Dashboard → Sorted Queue → Treat & Resolve  
-↓  
-Database (RESOLVED)
-
----
-
-## 👥 User Roles
-
-### 🧑‍⚕️ Nurse / Staff
-- Add new patients
-- Enter vitals and symptoms
-- Submit to queue
-
-### 🩺 Doctor
-- View prioritized queue
-- Treat and resolve patients
-- Update case status
+This ensures:
+- Faster decision-making  
+- Reduced human error  
+- Fair and consistent triage  
+- Better workload distribution between staff and doctors  
 
 ---
 
-## ✅ Features
+## 🎯 2. Key Features
+### 👨‍⚕️ **Role-based access**
+- **Staff (Nurse):** Add patients + enter vitals  
+- **Doctor:** View severity-sorted queue + mark patients resolved  
 
-- Secure Login (Role Based)
-- Patient Intake Form
-- Automated Triage Scoring Algorithm
-- Priority Queue (High → Low Severity)
-- Patient Status Tracking
-- JDBC Database Integration
-- Servlets + JSP UI
-- Clean Medical UI Theme
-
----
-
-## 🧠 Triage Logic
-
-Severity score is calculated based on:
-
-- Heart rate
-- Oxygen level (SpO₂)
-- Pain level (1–10)
-- Symptom keywords
-
-Severity Output:
-
-- 🔴 RED – Immediate care
-- 🟡 YELLOW – Urgent
-- 🟢 GREEN – Stable
+### ⚙️ **Core System Functions**
+- Intelligent severity scoring algorithm  
+- Automated queue sorting  
+- Real-time dashboard for doctors  
+- Session-based authentication  
+- Secure JDBC communication  
+- Fully modular MVC structure  
+- JSP + Servlet based frontend rendering  
 
 ---
 
-## 🏗️ Architecture (MVC Inspired)
+## 🧩 3. System Architecture (MVC)
+```
+Controller (Servlets)
+    ↓
+Service / Logic Layer (Triage scoring)
+    ↓
+DAO Layer (JDBC DB operations)
+    ↓
+MySQL Database
+    ↑
+JSP Views (UI)
+```
 
-Controller (Servlets) → Logic (TriageLogic) → DAO (DBConnection) → MySQL → JSP Views
+### ✔ Servlets
+- `AuthServlet`  
+- `TriageServlet`  
+- `ResolveServlet`
 
----
+### ✔ Logic Layer  
+- `TriageLogic.java` — calculates severity using vitals + symptoms.
 
-## 📂 Project Structure
-
-src/main/java  
-└── com.aegis  
-  ├── controller  
-  │  ├── AuthServlet  
-  │  ├── TriageServlet  
-  │  └── ResolveServlet  
-  ├── dao  
-  │  └── DBConnection  
-  ├── logic  
-  │  └── TriageLogic  
-  └── model  
-    └── Patient  
-
-src/main/webapp  
-├── login.jsp  
-├── staff_dashboard.jsp  
-├── doctor_dashboard.jsp  
-├── index.jsp  
-└── WEB-INF
+### ✔ DAO Layer  
+Handles all DB operations using **Prepared Statements** for security.
 
 ---
 
-## 🛢️ Database (MySQL Setup)
+## 🔍 4. Problem Understanding & Solution Design
+### ✔ Problem  
+During peak hospital hours, nurses must decide which patient needs immediate attention. Manual triage is risky and slow.
 
+### ✔ Solution  
+AegisPulse automates triage by:  
+1. Collecting vitals + symptoms  
+2. Calculating a severity score using a weighted formula  
+3. Sorting patients by severity  
+4. Showing doctors a real-time queue  
+5. Allowing doctors to resolve cases  
+
+### ✔ Why This Design?  
+- Fair and consistent  
+- Eliminates human bias  
+- Faster care for critical patients  
+
+---
+
+## 🏛️ 5. Flow Diagram
+```
+[Login] → [Staff Dashboard] → [Enter Patient Info]
+        → [Severity Algorithm] → [DB Store]
+        → [Doctor Dashboard Sorted Queue]
+        → [Resolve Patient]
+```
+
+---
+
+## 🗄️ 6. Database Design
+
+### 🔹 ER Diagram (Text Form)
+```
+Users (id, username, password, role)
+        |
+        | 1-to-many
+        |
+Patients (id, name, age, symptoms, vitals, severity_score, status)
+```
+
+### 🔹 Database Schema
+```sql
 DROP DATABASE IF EXISTS aegis_db;
 
 CREATE DATABASE aegis_db;
@@ -138,94 +131,115 @@ CREATE TABLE patients (
 
 SELECT * FROM users;
 
----
-
-## 🔌 Technologies Used
-
-- Java
-- Servlets
-- JSP
-- JDBC
-- MySQL
-- HTML/CSS
-- TailwindCSS
-- MVC Structure
+```
 
 ---
 
-## 🧪 Core Java Concepts Demonstrated
-
-- Classes & Objects
-- Encapsulation
-- Constructors
-- Methods
-- Exception Handling
-- JDBC Connectivity
-- Packages & Modular Design
-- Session Management
+## 🔢 7. Severity Scoring Algorithm
+Higher = more critical.
 
 ---
 
-## 🌐 Servlets & Web Integration
+## 🔐 8. JDBC Integration (Prepared Statements)
+```java
+String sql = "INSERT INTO patients(name, age, symptoms, heart_rate, pain_level, severity_score) VALUES (?, ?, ?, ?, ?, ?)";
+PreparedStatement stmt = conn.prepareStatement(sql);
+stmt.setString(1, patient.getName());
+stmt.setInt(2, patient.getAge());
+stmt.setString(3, patient.getSymptoms());
+stmt.setInt(4, patient.getHeartRate());
+stmt.setInt(5, patient.getPainLevel());
+stmt.setDouble(6, patient.getSeverityScore());
+stmt.executeUpdate();
+```
 
-Includes:
-
-- @WebServlet mappings
-- POST request handling
-- Form processing
-- HttpSession for roles
-- Redirect-based navigation
-- JSP rendering
-
----
-
-## 🛠️ Setup Instructions
-
-1. Clone repository  
-git clone https://github.com/Niraj79680/AegisPulse
-
-2. Import into IntelliJ/Eclipse
-
-3. Create MySQL database  
-CREATE DATABASE aegis_db;
-
-4. Update credentials in:  
-DBConnection.java
-
-5. Run using Apache Tomcat
-
-6. Open in browser:  
-http://localhost:8080/AegisPulse
+✔ Prevents SQL injection  
+✔ Safe DB operations  
 
 ---
 
-## ✅ Evaluation Mapping
+## 🌐 9. Servlets & Web Integration
+### Example `TriageServlet.java`
+```java
+@WebServlet("/triage")
+public class TriageServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String name = req.getParameter("name");
+        int age = Integer.parseInt(req.getParameter("age"));
+        int heart = Integer.parseInt(req.getParameter("heartRate"));
+        int pain = Integer.parseInt(req.getParameter("pain"));
 
-| Rubric Item | Status |
-|-------------|--------|
-| Problem Understanding | ✅ |
-| Core Java Concepts | ✅ |
-| JDBC Integration | ✅ |
-| Servlets & Web Integration | ✅ |
-| UI / UX | ✅ |
+        double score = TriageLogic.calculate(heart, pain);
+
+        Patient p = new Patient(name, age, heart, pain, score);
+        new PatientDAO().save(p);
+
+        resp.sendRedirect("staff_dashboard.jsp");
+    }
+}
+```
+
+✔ Proper request handling  
+✔ Session management  
+✔ MVC-compliant design  
+
+---
+## 10 Security and Testing
+
+### Security
+The application implements strong authentication and role-based access control (RBAC).
+Authentication is handled using an `AuthServlet`, while authorization is enforced through an
+`AuthFilter` that restricts access to application resources based on user roles.
+
+### Testing
+Unit and integration testing were implemented to improve the reliability and maintainability
+of the complaint workflow.
+
+- **Unit Testing:**  
+  `TriageLogicTest` was implemented to validate core business logic, including severity score
+  calculation and triage color decision rules.
+
+- **Integration / Workflow Testing:**  
+  `ComplaintIntegrationTest` was implemented to verify the complaint workflow by testing the
+  interaction between complaint handling logic and triage decision components.
+
+## 🖼️ 11. Screenshots (folder added in repo)
+
+## ⚒️ 12. How to Run
+### Requirements
+- Java 8+  
+- Apache Tomcat 9+  
+- MySQL  
+- IntelliJ / Eclipse  
+
+### Steps
+1. Clone the repo  
+2. Import as Maven project  
+3. Configure Tomcat  
+4. Create the database using SQL above  
+5. Update DB credentials in `DBConnection.java`  
+6. Run on Tomcat  
+7. Open in browser:
+```
+http://localhost:8081/AegisPulse
+```
 
 ---
 
-## 🏁 Conclusion
-
-AEGIS Pulse demonstrates:
-
-- Real-world problem solving
-- Complete Java web application
-- Secure database integration
-- Professional UI design
-- Clear clinical workflow
-
-This project meets all rubric requirements for full marks.
+## 🔮 13. Future Enhancements
+- ML-based severity prediction  
+- Email/SMS alerts  
+- Admin analytics dashboard  
+- REST API for hospital system integration  
+- Docker support  
 
 ---
 
-## 👤 Author
+## 🏁 14. Conclusion
+AegisPulse is a complete Java web application demonstrating:
 
-Niraj kumar  
-Computer Science Engineering
+- Strong problem understanding  
+- Full MVC architecture  
+- Servlets + JSP integration  
+- Secure JDBC usage  
+- Clean modular design  
