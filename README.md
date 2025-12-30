@@ -154,43 +154,25 @@ CREATE TABLE patients (
 🔢 8. Severity Scoring Algorithm
 
 The clinical engine uses the following weights to determine the Triage Color:
-
+ Severity Scoring Logic
 Parameter
-
 Condition
-
-Weight
-
-Oxygen (SpO2)
-
+Score
+Oxygen
 < 90%
-
-+40 points
-
-Oxygen (SpO2)
-
-90% - 94%
-
-+20 points
-
++40
+Oxygen
+90–94%
++20
 Heart Rate
-
-> 120 or < 40
-
-+30 points
-
+>120 or <40
++30
 Pain Level
-
-(Scale 1-10)
-
-Value * 3
-
+1–10
+×3
 Keywords
-
-"Chest Pain", "Bleeding"
-
-+40 to +50 points
-
+Chest pain, bleeding
++40–50
 Color Mapping:
 
 Score >= 75: 🔴 RED (Immediate)
