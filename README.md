@@ -16,7 +16,47 @@ Optimized Workflow: Segregates duties between Nurses (Intake) and Doctors (Resol
 
 Data Integrity: Maintains a secure, persistent record of every patient assessment.
 
-🎯 2. Key Features
+##2 Project structure 
+
+AegisPulse
+│
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com.aegis
+│   │   │       ├── controller
+│   │   │       │   ├── AuthServlet.java
+│   │   │       │   ├── ResolveServlet.java
+│   │   │       │   ├── TriageServlet.java
+│   │   │       │   └── AuthFilter.java
+│   │   │       │
+│   │   │       ├── logic
+│   │   │       │   └── TriageLogic.java
+│   │   │       │
+│   │   │       ├── dao
+│   │   │       │   └── DBConnection.java
+│   │   │       │
+│   │   │       └── model
+│   │   │           └── Patient.java
+│   │   │
+│   │   └── webapp
+│   │       ├── index.jsp
+│   │       ├── login.jsp
+│   │       ├── doctor_dashboard.jsp
+│   │       └── staff_dashboard.jsp
+│   │
+│   └── resources
+│
+└── src
+    └── test
+        └── java
+            └── com.aegis
+                ├── controller
+                │   └── ComplaintIntegrationTest.java
+                │
+                └── logic
+                    └── TriageLogicTest.java
+🎯 3. Key Features
 
 👨‍⚕️ Role-Based Access Control (RBAC)
 
@@ -34,7 +74,7 @@ Session Security: Enforced by AuthFilter to prevent unauthorized URL access.
 
 MVC Architecture: Separation of concerns using Servlets (Controller), Logic (Service), and JDBC (Data).
 
-🧩 3. System Architecture (MVC)
+🧩 4. System Architecture (MVC)
 
 The system is built using the Model-View-Controller pattern to ensure modularity and ease of testing.
 
@@ -55,7 +95,7 @@ Logic: TriageLogic.java — The "Brain" of the system that handles clinical weig
 
 DAO: PatientDAO — Handles all CRUD operations using secure Prepared Statements.
 
-🔍 4. Problem & Solution Design
+🔍 5. Problem & Solution Design
 
 The Challenge
 
@@ -71,7 +111,7 @@ Communication: The system immediately updates the Doctor's Dashboard.
 
 Action: Doctors can resolve the highest-scoring patients first, ensuring safety.
 
-🏛️ 5. Technical Flow Diagram
+🏛️ 6. Technical Flow Diagram
 
 [ LOGIN ] -> [ AUTH FILTER ] -> [ STAFF DASHBOARD ] -> [ FORM INPUT ]
                                           |
@@ -82,7 +122,7 @@ Action: Doctors can resolve the highest-scoring patients first, ensuring safety.
                                 [ DOCTOR DASHBOARD (Sorted) ] -> [ RESOLVE ]
 
 
-🗄️ 6. Database Design
+🗄️ 7. Database Design
 
 Database Schema (MySQL)
 
@@ -113,7 +153,7 @@ CREATE TABLE patients (
 );
 
 
-🔢 7. Severity Scoring Algorithm
+🔢 8. Severity Scoring Algorithm
 
 The clinical engine uses the following weights to determine the Triage Color:
 
@@ -161,7 +201,7 @@ Score 40-74: 🟡 YELLOW (Urgent)
 
 Score < 40: 🟢 GREEN (Stable)
 
-🔐 8. JDBC Integration & Security
+🔐 9. JDBC Integration & Security
 
 We utilize Prepared Statements to eliminate SQL Injection risks.
 
@@ -179,7 +219,7 @@ try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 }
 
 
-🧪 9. Quality Assurance & Testing
+🧪 10. Quality Assurance & Testing
 
 To ensure clinical reliability, the project includes:
 
@@ -195,7 +235,7 @@ Tests the end-to-end flow from Servlet input to Database persistence.
 
 Verifies that the dashboard correctly displays the prioritized queue.
 
-⚒️ 10. How to Run
+⚒️ 11. How to Run
 
 Requirements
 
@@ -221,10 +261,10 @@ Deploy: Move the .war file to Tomcat's webapps folder.
 
 Access: http://localhost:8080/AegisProject/
 
-#11.
+#12.
 “The system demonstrates effective collaboration through modular design and role-based architecture. Each component (authentication, triage logic, data access, and presentation) can be independently developed and maintained, reflecting real-world team-based software development practices.”
 
-🏁 12.
+🏁 13.
 👥 Authors & Collaboration
 
 This project was developed as a collaborative academic effort, following standard team-based software development practices.
