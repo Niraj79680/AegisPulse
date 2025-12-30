@@ -45,17 +45,15 @@ AegisPulse
 │   │       ├── doctor_dashboard.jsp
 │   │       └── staff_dashboard.jsp
 │   │
-│   └── resources
+│   └── test
+│       └── java
+│           └── com.aegis
+│               ├── controller
+│               │   └── ComplaintIntegrationTest.java
+│               └── logic
+│                   └── TriageLogicTest.java
 │
-└── src
-    └── test
-        └── java
-            └── com.aegis
-                ├── controller
-                │   └── ComplaintIntegrationTest.java
-                │
-                └── logic
-                    └── TriageLogicTest.java
+└── README.md
 🎯 3. Key Features
 
 👨‍⚕️ Role-Based Access Control (RBAC)
